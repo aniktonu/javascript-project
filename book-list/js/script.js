@@ -1,20 +1,10 @@
 
 //2nd work:
 //define ui element
-let form = document.querySelector('#book-form')
+let form = document.querySelector('#book-form');
 //11th work
 // define booklist element
 let booklist = document.querySelector('#book-list');
-
-
-//1st work:
-//add event lister
-form.addEventListener('submit', newBook);
-//12th work
-//add event listeners into booklist element
-booklist.addEventListener('click', removeBook);
-
-
 
 //3rd work:
 //declear eventlister function
@@ -36,6 +26,7 @@ function newBook(e) {
         UI.addToBookList(book); // part of 7th work
         UI.clearFields(); // part of 9th work
         UI.showAlert("book submited successfully", "success");
+        Store.addBooks(book); // part of 17th work)
     }
 }
 
@@ -63,6 +54,7 @@ class UI {
         <td> ${book.isbn}</td>
         <td><a href="#" class="delete">X</a></td>`; // Delete built-in class os sceleton css !       
         list.appendChild(row);
+
     }
     //9th work
     //create a function to reset the form after data receive
@@ -81,7 +73,7 @@ class UI {
         //11th work 
         // call a function to remove the alert after 3 secend!
         setTimeout(() => {
-            document.querySelector('.alert').remove()
+            document.querySelector('.alert').remove();
         }, 3000);
     }
     //part of 13th work: call the function to remove booklist
@@ -90,7 +82,7 @@ class UI {
             target.parentElement.parentElement.remove();
             //14th work:
             //give e alert message for book remove 
-            UI.showAlert("removed book successfully", "success")
+            UI.showAlert("removed book successfully", "success");
 
         }
     }
@@ -113,6 +105,50 @@ function removeBook(e) {
 // optimized code (make class functions to stitc function )
 
 
-//15th work
-//local storage area
-// defina a local storage area class
+//15th work :local storage area
+//defina a local storage area class for hadle local storage everything
+class Store {
+    //16th work: define getiteam() to set book obejct and get data from local storage
+    static getBooks() {
+        let booklist;
+        if (localStorage.getItem('booklist') === null) {
+            booklist = [];
+        } else {
+            booklist = JSON.parse(localStorage.getItem('booklist'));
+        }
+        return booklist;
+    }
+
+
+    //17th work: define setitem() to add book into local storage booklist object
+    static addBooks(book) {
+        let booklist = Store.getBooks();
+        booklist.push(book);
+        localStorage.setItem('booklist', JSON.stringify(booklist));
+    }
+    //18th work :
+    //displayBooklist() - display local storage iteams into UI interface (booklist)
+    static displayBooklist() {
+        let booklist = Store.getBooks();
+        booklist.forEach(book => {
+            UI.addToBookList(book);
+        });
+
+    }
+    //19th work :
+    //removeBook() - remove book from local storage
+   
+
+
+
+    
+}
+
+//1st work:
+//add event lister
+form.addEventListener('submit', newBook);
+//12th work
+//add event listeners into booklist element
+booklist.addEventListener('click', removeBook);
+//part of 18th work
+document.addEventListener('DOMContentLoaded', Store.displayBooklist());
